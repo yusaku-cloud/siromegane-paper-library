@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+  "name": "Siromegane Bridge",
+  "version": "0.4.0",
+  "description": "siromegane-paper-library（臨床工学向け論文管理アプリ）とZoteroをつなぐ橋渡し。試作。",
+  "applications": {
+    "zotero": {
+      "id": "bridge@siromegane-paper-library",
+      "update_url": "https://localhost.invalid/siromegane-bridge/updates.json",
+      "strict_min_version": "7.0",
+      "strict_max_version": "10.*"
+    }
+  }
+}
