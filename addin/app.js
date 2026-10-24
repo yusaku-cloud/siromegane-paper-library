@@ -130,30 +130,62 @@ async function insertCitation(key) {
 }
 
 // ---- この原稿の引用 ----
+// 原稿に出てくる順に並べ、本文中の印（1) など）と、引用の直前の文を添える。
+// Refresh前は印が空なので、番号の見込み（同じ論文は同じ番号、初めて出た順）を出す
 $("read-doc").onclick = async () => {
   if (!inWord) { log("Wordの中で使えます"); return; }
   await Word.run(async ctx => {
     const fields = ctx.document.body.fields;
     fields.load("items/code,items/result/text");
     await ctx.sync();
-    const cites = [];
-    for (const f of fields.items) {
+    const found = [];
+    fields.items.forEach((f, idx) => {
       const m = /ZOTERO_ITEM\s+CSL_CITATION\s+(\{.*\})/s.exec(f.code || "");
-      if (!m) continue;
-      try {
-        const data = JSON.parse(m[1]);
-        for (const ci of data.citationItems) cites.push({ shown: f.result.text, title: ci.itemData?.title, uri: ci.uris?.[0] });
-      } catch (e) { cites.push({ shown: f.result.text, title: "（読めない引用）" }); }
-    }
-    $("doc-cites").innerHTML = cites.length ? "" : "<li>Zoteroの引用は見つかりませんでした</li>";
-    cites.forEach(c => {
+      if (!m) return;
+      let items;
+      try { items = JSON.parse(m[1]).citationItems.map(ci => ({ title: ci.itemData?.title, uri: ci.uris?.[0] || ci.itemData?.title })); }
+      catch (e) { items = [{ title: "（読めない引用）", uri: null }]; }
+      // 段落の頭から引用の手前までの文
+      const para = f.result.paragraphs.getFirst();
+      const before = para.getRange("Start").expandTo(f.result.getRange("Start"));
+      before.load("text");
+      found.push({ idx, shown: f.result.text.trim(), items, before });
+    });
+    await ctx.sync();
+
+    const numbers = new Map();
+    for (const c of found) for (const it of c.items) if (it.uri && !numbers.has(it.uri)) numbers.set(it.uri, numbers.size + 1);
+
+    $("doc-cites").innerHTML = found.length ? "" : "<li>Zoteroの引用は見つかりませんでした</li>";
+    found.forEach((c, n) => {
+      const guess = c.items.map(it => numbers.get(it.uri) ?? "?").join(",") + ")";
+      const mark = c.shown
+        ? `<span class="mark">${esc(c.shown)}</span>`
+        : `<span class="mark">${esc(guess)}</span><span class="guess">見込み（Refreshで確定）</span>`;
+      const ctxText = c.before.text.replace(/\s+/g, " ").trim();
       const li = document.createElement("li");
-      li.innerHTML = `<div class="title">${esc(c.title)}</div><div class="meta">原稿での表示：${esc(c.shown || "（未整形）")}</div>`;
+      li.innerHTML = `<div class="cite-head">${mark}<span class="meta">${n + 1}か所目</span></div>
+        <div class="context">${ctxText ? "…" + esc(ctxText.slice(-40)) : "（段落の頭）"}<span class="here">${esc(c.shown || guess)}</span></div>
+        ${c.items.map(it => `<div class="title">${esc(it.title)}</div>`).join("")}
+        <div class="row"><button>原稿のこの場所へ</button></div>`;
+      li.querySelector("button").onclick = () => jumpToField(c.idx);
       $("doc-cites").appendChild(li);
     });
-    log(`引用 ${cites.length}件`);
-  });
+    log(`引用 ${found.length}か所／論文 ${numbers.size}本`);
+  }).catch(e => log("読めませんでした：" + e));
 };
+
+async function jumpToField(idx) {
+  await Word.run(async ctx => {
+    const fields = ctx.document.body.fields;
+    fields.load("items");
+    await ctx.sync();
+    const f = fields.items[idx];
+    if (!f) { log("引用が見つかりません。もう一度「原稿の引用を読む」を押してください"); return; }
+    f.result.select();
+    await ctx.sync();
+  }).catch(e => log("移れませんでした：" + e));
+}
 
 // ---- タブ ----
 document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
