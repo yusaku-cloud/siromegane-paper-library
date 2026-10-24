@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>しろめがね 論文ライブラリ</title>
-<meta name="description" content="臨床工学の研究者・学生のための論文ライブラリ（試作版）。Wordの中で、PubMed・J-STAGEから論文を探し、Zoteroにためて、原稿に引用できます。論文と原稿は手元のPCに残ります。">
+<meta name="description" content="臨床工学の研究者・学生のための論文ライブラリ（試作版）。Wordの中で、PubMedから論文を探し、Zoteroにためて、原稿に引用できます。論文と原稿は手元のPCに残ります。">
 <link rel="icon" href="addin/assets/icon-32.png">
 <meta property="og:title" content="しろめがね 論文ライブラリ">
 <meta property="og:description" content="Wordの中で、論文を探す・ためる・引用する。臨床工学の研究者・学生のための論文ライブラリ（試作版）。">
@@ -139,9 +139,9 @@ footer .maker { font-size: 11px; opacity: .75; }
 <section class="hero">
   <div class="wrap">
     <div>
-      <span class="badge">試作版 v0.1</span>
+      <span class="badge">試作版 v0.2</span>
       <h1>Wordの中で、<br>論文を<span class="accent"><span class="nw">探す・</span><span class="nw">ためる・</span><span class="nw">引用する</span></span>。</h1>
-      <p class="sub">臨床工学の研究者・学生のための論文ライブラリです。PubMedとJ-STAGEで探した論文をZoteroにため、書いている原稿にそのまま引用できます。</p>
+      <p class="sub">臨床工学の研究者・学生のための論文ライブラリです。PubMedで探した論文をZoteroにため、書いている原稿にそのまま引用できます。</p>
       <div class="ctas"><a class="cta" href="#start">はじめ方を見る</a><a class="cta ghost" href="#how">しくみを見る</a></div>
     </div>
     <div class="figure reveal" aria-label="Wordの画面の右側に、論文を探して保存・引用する窓が開いている図">
@@ -165,7 +165,7 @@ footer .maker { font-size: 11px; opacity: .75; }
         <g fill="none" stroke="var(--blue)" stroke-width="2"><ellipse cx="327" cy="76" rx="8" ry="7"/><ellipse cx="349" cy="76" rx="8" ry="7"/><path d="M335 74h6"/></g>
         <text x="364" y="81" font-size="12" font-weight="700" fill="var(--ink)">論文ライブラリ</text>
         <rect x="318" y="96" width="172" height="24" rx="4" fill="var(--bg)" stroke="var(--line)"/>
-        <text x="326" y="112" font-size="11" fill="var(--muted)">人工心肺 溶血</text>
+        <text x="326" y="112" font-size="11" fill="var(--muted)">ECMO hemolysis</text>
         <g>
           <rect x="318" y="132" width="172" height="58" rx="6" fill="var(--bg)" stroke="var(--line)"/>
           <rect x="328" y="142" width="120" height="8" rx="3" fill="var(--ink)" opacity=".55"/>
@@ -191,7 +191,7 @@ footer .maker { font-size: 11px; opacity: .75; }
     <h2>こんなときのために作っています</h2>
     <div class="cases">
       <div class="case reveal"><h3>Mendeleyから移りたい</h3><p>ためてきた論文は、Zoteroの読み込み機能でフォルダやPDFごと移せます。その上で、このライブラリから使います。</p></div>
-      <div class="case reveal"><h3>英語と日本語の文献を行き来する</h3><p>PubMedの英語論文と、J-STAGEの学会誌（人工臓器、体外循環技術など）を同じ窓で探せます。</p></div>
+      <div class="case reveal"><h3>英語の論文を原稿から離れずに引く</h3><p>PubMedの論文を、Wordの窓から探して、そのまま原稿に引用できます。</p></div>
       <div class="case reveal"><h3>引用の抜けや取り違えが心配</h3><p>原稿に入っている引用を一覧にして、どの論文を引いているかを確かめられます。</p></div>
     </div>
   </div>
@@ -206,8 +206,8 @@ footer .maker { font-size: 11px; opacity: .75; }
       <div class="feature reveal">
         <div class="num">01 探す</div>
         <svg viewBox="0 0 56 56" aria-hidden="true"><g fill="none" stroke="var(--blue)" stroke-width="2.4"><circle cx="24" cy="24" r="14"/><path d="M34 34l12 12"/><path d="M17 22h14M17 28h9"/></g></svg>
-        <h3>PubMedとJ-STAGEをまとめて検索</h3>
-        <p>英語の語句でPubMed、日本語の語句でJ-STAGE。題名・著者・雑誌・年・DOIが並びます。</p>
+        <h3>PubMedを検索</h3>
+        <p>英語の語句でPubMedを探します。題名・著者・雑誌・年・DOIが並びます。</p>
       </div>
       <div class="feature reveal">
         <div class="num">02 ためる</div>
@@ -250,19 +250,14 @@ footer .maker { font-size: 11px; opacity: .75; }
           <rect x="34" y="300" width="196" height="60" rx="10" fill="var(--bg)" stroke="var(--line)" stroke-width="1.6"/>
           <text x="52" y="326" font-size="14" font-weight="700" fill="var(--ink)">PubMed</text>
           <text x="52" y="346" font-size="11" fill="var(--muted)">英語の医学論文</text>
-          <rect x="330" y="300" width="196" height="60" rx="10" fill="var(--bg)" stroke="var(--line)" stroke-width="1.6"/>
-          <text x="348" y="326" font-size="14" font-weight="700" fill="var(--ink)">J-STAGE</text>
-          <text x="348" y="346" font-size="11" fill="var(--muted)">日本の学会誌</text>
           <path class="flow" d="M132 142 V 300" stroke="var(--blue)" stroke-width="2" fill="none"/>
-          <path class="flow" d="M428 232 V 300" stroke="var(--blue)" stroke-width="2" fill="none"/>
           <text x="142" y="282" font-size="11" fill="var(--muted)">検索の語句だけ</text>
-          <text x="438" y="282" font-size="11" fill="var(--muted)">検索の語句だけ</text>
         </svg>
       </div>
       <ul class="points">
         <li class="reveal"><strong>論文とPDFは、あなたのZoteroの中。</strong>このライブラリが預かることはありません。</li>
         <li class="reveal"><strong>原稿は、あなたのWordの中。</strong>外へ送りません。</li>
-        <li class="reveal"><strong>外へ出るのは検索の語句だけ。</strong>PubMedとJ-STAGEへ、探すために送ります。</li>
+        <li class="reveal"><strong>外へ出るのは検索の語句だけ。</strong>PubMedへ、探すために送ります。</li>
         <li class="reveal"><strong>窓がつながるのは、そのPCのZoteroだけ。</strong>橋渡しのプラグインは、この窓からの要求にだけ答えます。</li>
       </ul>
     </div>
@@ -286,7 +281,21 @@ footer .maker { font-size: 11px; opacity: .75; }
   </div>
 </section>
 
-<section id="next" class="alt">
+<section id="sources" class="alt">
+  <div class="wrap">
+    <p class="eyebrow">SOURCES</p>
+    <h2>PubMedのみ、つないでいます</h2>
+    <p class="lead">論文を探す先として、このライブラリがつないでいるのはPubMedだけです。</p>
+    <ul class="points">
+      <li class="reveal"><strong>ほかの論文データベースは、規約で申請が要ることがあります。</strong>例えばJ-STAGEは、WebAPI利用規約（第2条）で、営利目的で使うときは有償・無償に関わらずJSTへの利用申請が必要とされています。</li>
+      <li class="reveal"><strong>このライブラリは、営利目的にあたると判断しました。</strong>無料でお配りしていますが、しろめがね先生の発信活動の一部として配っているためです。</li>
+      <li class="reveal"><strong>ほかの雑誌やデータベースをつなぎたい方は、ご自身でどうぞ。</strong>例えばJ-STAGEなど、よく読む論文が載っている先があれば、Claude CodeやCodexなどのAIに「自分のPCで、○○のAPIで論文を探せるようにして」と頼むと、ご自身用の仕組みを作れます。</li>
+      <li class="reveal"><strong>その場合は、つなぐ先の規約をご自身で読んで守ってください。</strong>例えばJ-STAGEは、非営利で使うなら申請は要りませんが、「Powered by J-STAGE」の表示などの条件があります。つないだものを人に配ったり、営利目的で使ったりするときは、JSTへの申請が必要です。<a href="https://www.jstage.jst.go.jp/static/pages/WebAPI/-char/ja" target="_blank" rel="noopener">J-STAGE WebAPI利用規約</a></li>
+    </ul>
+  </div>
+</section>
+
+<section id="next">
   <div class="wrap">
     <p class="eyebrow">ROADMAP</p>
     <h2>これから足していくこと</h2>
@@ -308,7 +317,9 @@ footer .maker { font-size: 11px; opacity: .75; }
   <div class="wrap">
     <div>
       しろめがね 論文ライブラリ（試作版）　<a href="https://github.com/yusaku-cloud/siromegane-paper-library">GitHub</a><br>
-      Zotero、Microsoft Word、PubMed、J-STAGE は、それぞれの提供元の名称・商標です。
+      Zotero は Corporation for Digital Scholarship の登録商標です。このライブラリはZoteroの公式製品ではなく、提携や推奨を受けたものでもありません。Siromegane Bridge は AGPL v3 で公開しています。<br>
+      PubMedの検索には、米国国立医学図書館（NLM）のNCBIが提供するE-utilitiesを使っています。NLM・NCBIの推奨や提携を受けたものではありません。<a href="https://www.ncbi.nlm.nih.gov/home/about/policies/">NCBIの免責事項と著作権</a>。論文の抄録などの著作権は、出版社・著者にあります。<br>
+      Microsoft Word、PubMed、J-STAGE は、それぞれの提供元の名称・商標です。
     </div>
     <div class="maker">made by しろめがね先生</div>
   </div>

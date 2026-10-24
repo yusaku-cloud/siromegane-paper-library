@@ -9,7 +9,7 @@
   <ProviderName>yusaku-cloud</ProviderName>
   <DefaultLocale>ja-JP</DefaultLocale>
   <DisplayName DefaultValue="しろめがね 論文ライブラリ"/>
-  <Description DefaultValue="臨床工学向けの論文管理。PubMed・J-STAGEで探してZoteroに保存し、Wordに引用する（試作）。"/>
+  <Description DefaultValue="臨床工学向けの論文管理。PubMedで探してZoteroに保存し、Wordに引用する（試作）。"/>
   <IconUrl DefaultValue="https://yusaku-cloud.github.io/siromegane-paper-library/addin/assets/icon-32.png"/>
   <HighResolutionIconUrl DefaultValue="https://yusaku-cloud.github.io/siromegane-paper-library/addin/assets/icon-64.png"/>
   <SupportUrl DefaultValue="https://github.com/yusaku-cloud/siromegane-paper-library"/>

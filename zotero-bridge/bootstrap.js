@@ -1,4 +1,8 @@
-/* Siromegane Bridge（試作 v0.4.0）
+/* Siromegane Bridge（試作 v0.5.0）
+ * Copyright (C) 2026 しろめがね先生
+ * SPDX-License-Identifier: AGPL-3.0-or-later（Zoteroの中で動くため、Zoteroと同じAGPLで公開する。全文は LICENSE）
+ *
+ * v0.5.0：J-STAGEの中継（/cepl/jstage）を外した。WebAPI利用規約で営利目的の利用に申請が要るため（2026-10-24）
  *
  * Zoteroの受け口（localhost:23119）に /cepl/ で始まる受け口を足し、
  * 許可したページ（ALLOWED_ORIGINS）からだけ、ブラウザ経由の読み書きを受ける。
@@ -91,7 +95,7 @@ function makeEndpoint(methods, handler) {
 var ENDPOINTS = {
 	// つながったかを確かめる
 	"/cepl/ping": makeEndpoint(["GET"], async (req, origin) => {
-		return reply(origin, 200, { ok: true, bridge: "0.4.0", zotero: Zotero.version });
+		return reply(origin, 200, { ok: true, bridge: "0.5.0", zotero: Zotero.version });
 	}),
 
 	// 保存した論文を探す（?q=語句、?limit=件数）
@@ -134,18 +138,6 @@ var ENDPOINTS = {
 		}
 		await item.saveTx();
 		return reply(origin, 200, { ok: true, duplicate: false, item: itemToJSON(item) });
-	}),
-
-	// J-STAGEの検索を中継する（J-STAGEはブラウザからの直接の要求を許していないため）
-	// ?article=論文名の語句 ／ ?text=全文の語句、?count=件数。J-STAGEのXML（Atom）をそのまま返す
-	"/cepl/jstage": makeEndpoint(["GET"], async (req, origin) => {
-		var params = new URLSearchParams({ service: "3", count: String(Math.min(parseInt(req.searchParams.get("count") || "20"), 100)) });
-		for (let k of ["article", "text", "author", "material", "pubyearfrom", "pubyearto"]) {
-			let v = req.searchParams.get(k);
-			if (v) params.set(k, v);
-		}
-		var xhr = await Zotero.HTTP.request("GET", "https://api.jstage.jst.go.jp/searchapi/do?" + params.toString(), { responseType: "text", timeout: 20000 });
-		return [200, Object.assign(corsHeaders(origin), { "Content-Type": "application/xml; charset=utf-8" }), xhr.responseText];
 	}),
 
 	// 論文にPDFを付ける。本文は {"key": 論文のキー, "filename": "...pdf", "base64": "..."}

@@ -21,14 +21,12 @@
 
 <section id="tab-search" class="tab active">
   <form id="search-form">
-    <input id="q" type="search" placeholder="例：ECMO hemolysis ／ 人工心肺" required>
+    <input id="q" type="search" placeholder="例：ECMO hemolysis" required>
     <div class="row">
-      <label><input type="checkbox" id="src-pubmed" checked> PubMed</label>
-      <label><input type="checkbox" id="src-jstage" checked> J-STAGE</label>
-      <button type="submit">検索</button>
+      <button type="submit">PubMedで検索</button>
     </div>
   </form>
-  <p class="hint">PubMedは英語、J-STAGEは日本語の語句で探します。AIで日本語から検索式を作る機能は、次の版で足します。</p>
+  <p class="hint">英語の語句で探します。AIで日本語から検索式を作る機能は、次の版で足します。PubMedのみ、つないでいます（<a href="../index.html#sources" target="_blank" rel="noopener">理由</a>）。</p>
   <ul id="results" class="list"></ul>
 </section>
 
@@ -49,6 +47,7 @@
 </section>
 
 <footer id="log" class="log"></footer>
+<p class="notice">PubMedの検索には、米国国立医学図書館（NLM）のNCBIが提供するE-utilitiesを使っています。このライブラリはNLM・NCBIの推奨や提携を受けたものではありません。<a href="https://www.ncbi.nlm.nih.gov/home/about/policies/" target="_blank" rel="noopener">NCBIの免責事項と著作権</a>／論文の抄録などの著作権は出版社・著者にあります。Zoteroは Corporation for Digital Scholarship の登録商標で、このライブラリはZoteroの公式製品ではありません。</p>
 <script src="app.js"></script>
 </body>
 </html>

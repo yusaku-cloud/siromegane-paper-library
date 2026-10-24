@@ -1,12 +1,16 @@
-/* siromegane-paper-library Wordアドイン 試作 v0.1.0
- * - 探す：PubMed（直接）、J-STAGE（Zoteroの橋渡し経由）
+/* siromegane-paper-library Wordアドイン 試作 v0.2.0
+ * - 探す：PubMed（NCBIのE-utilitiesへ直接）
+ *   J-STAGEはつながない。WebAPI利用規約 第2条で、営利目的の利用は無償でもJSTへの申請が要り、
+ *   このライブラリは発信活動の一部として配るため営利目的にあたると判断した（2026-10-24）
  * - 保存：Zoteroの橋渡し（Siromegane Bridge）へ送る
  * - 引用する：Zotero形式の引用フィールドをカーソル位置へ差し込む（WordApi 1.5）
  * - この原稿の引用：原稿の中のZoteroの引用を読む（WordApi 1.5）
  */
 const BRIDGE = "http://127.0.0.1:23119/cepl";
 const EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils";
-const TOOL = "tool=siromegane-paper-library";
+// NCBIは配布するソフトに tool と email（開発者の連絡先）を付けるよう求めている（2026-10-24 西川さん指定）
+const NCBI_EMAIL = "yusaku@nishiken2025.com";
+const TOOL = "tool=siromegane-paper-library" + (NCBI_EMAIL ? "&email=" + encodeURIComponent(NCBI_EMAIL) : "");
 
 let inWord = false;
 const $ = id => document.getElementById(id);
@@ -17,7 +21,7 @@ const log = msg => { $("log").textContent = msg; };
 async function bridgeGet(path) {
   const r = await fetch(BRIDGE + path);
   if (!r.ok) throw new Error("橋渡し " + r.status);
-  return path.startsWith("/jstage") ? r.text() : r.json();
+  return r.json();
 }
 async function bridgePost(path, body) {
   const r = await fetch(BRIDGE + path, { method: "POST", headers: { "Content-Type": "text/plain" }, body: JSON.stringify(body) });
@@ -63,27 +67,6 @@ async function searchPubMed(q) {
   });
 }
 
-async function searchJStage(q) {
-  const xml = await bridgeGet(`/jstage?count=10&article=${encodeURIComponent(q)}`);
-  const dom = new DOMParser().parseFromString(xml, "application/xml");
-  const pick = (el, sel) => el.querySelector(sel)?.textContent?.trim() || "";
-  return [...dom.getElementsByTagName("entry")].map(e => ({
-    source: "J-STAGE",
-    title: pick(e, "article_title ja") || pick(e, "article_title en"),
-    creators: [...e.querySelectorAll("author ja name")].map(n => {
-      const [last, ...rest] = n.textContent.trim().split(/\s+/);
-      return { lastName: last, firstName: rest.join(" ") };
-    }),
-    journal: pick(e, "material_title ja") || pick(e, "material_title en"),
-    year: e.getElementsByTagName("pubyear")[0]?.textContent || "",
-    volume: e.getElementsByTagName("prism:volume")[0]?.textContent || "",
-    issue: e.getElementsByTagName("prism:number")[0]?.textContent || "",
-    pages: [e.getElementsByTagName("prism:startingPage")[0]?.textContent, e.getElementsByTagName("prism:endingPage")[0]?.textContent].filter(Boolean).join("-"),
-    DOI: e.getElementsByTagName("prism:doi")[0]?.textContent || "",
-    url: pick(e, "article_link ja") || pick(e, "article_link en")
-  })).filter(p => p.title); // 0件のとき、J-STAGEは中身の無い entry を1つ返す
-}
-
 function renderResults(list) {
   $("results").innerHTML = list.length ? "" : "<li>見つかりませんでした</li>";
   list.forEach((p, i) => {
@@ -105,10 +88,7 @@ $("search-form").onsubmit = async ev => {
   ev.preventDefault();
   const q = $("q").value.trim();
   log("検索中…");
-  const jobs = [];
-  if ($("src-pubmed").checked) jobs.push(searchPubMed(q).catch(e => { log("PubMed：" + e); return []; }));
-  if ($("src-jstage").checked) jobs.push(searchJStage(q).catch(e => { log("J-STAGE：" + e); return []; }));
-  const all = (await Promise.all(jobs)).flat();
+  const all = await searchPubMed(q).catch(e => { log("PubMed：" + e); return []; });
   renderResults(all);
   log(`${all.length}件`);
 };
@@ -141,7 +121,9 @@ async function insertCitation(key) {
   };
   await Word.run(async ctx => {
     const sel = ctx.document.getSelection();
-    sel.insertField("End", Word.FieldType.addin, "ZOTERO_ITEM CSL_CITATION " + JSON.stringify(citation), false);
+    // removeFormatting=true で「\* MERGEFORMAT」を付けない。差し込んだ直後は中身（コード）が表示されるので表示に戻す（2026-10-24 Wordで確認）
+    const field = sel.insertField("End", Word.FieldType.addin, "ZOTERO_ITEM CSL_CITATION " + JSON.stringify(citation), true);
+    try { field.showCodes = false; } catch (e) { /* showCodes に対応しないWord */ }
     await ctx.sync();
   });
   log("引用を差し込みました。Zoteroタブの「Refresh」で形が整います。");
