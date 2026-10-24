@@ -84,6 +84,12 @@ header nav a:hover { color: var(--blue); }
 .step::before { content: counter(s); display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
   background: var(--blue-soft); color: var(--blue); font-weight: 700; margin-bottom: 12px; }
 .step p { color: var(--muted); font-size: 15px; margin: 0; }
+.ai-route { margin-top: 30px; padding: 26px 28px; border: 1.6px solid var(--blue); border-radius: 12px; background: var(--blue-soft); }
+.ai-route .tag { display: inline-block; margin: 0 0 8px; padding: 2px 10px; border-radius: 99px; background: var(--blue); color: #fff; font-size: 13px; font-weight: 700; }
+.ai-route h3 { margin: 0 0 12px; }
+.ai-route ol { margin: 0; padding-left: 1.4em; color: var(--ink); font-size: 15px; line-height: 1.9; }
+.ai-route .note { margin: 12px 0 0; color: var(--muted); font-size: 14px; }
+.route-label { margin-top: 34px; font-size: 16px; font-weight: 700; color: var(--ink); }
 .env { margin-top: 30px; font-size: 15px; color: var(--muted); border: 1px dashed var(--line); border-radius: 10px; padding: 18px 22px; }
 .env strong { color: var(--ink); }
 
@@ -268,11 +274,22 @@ footer .maker { font-size: 11px; opacity: .75; }
   <div class="wrap">
     <p class="eyebrow">GETTING STARTED</p>
     <h2>はじめ方</h2>
-    <p class="lead">準備は最初の1回だけです。詳しい手順は、お配りしている簡易マニュアルにまとめています。</p>
+    <p class="lead">準備は最初の1回だけです。お配りしているインストール一式（zip）を使います。</p>
+    <div class="ai-route reveal">
+      <p class="tag">Claude Code か Codex がある方</p>
+      <h3>フォルダを開いて「インストール」と言うだけ</h3>
+      <ol>
+        <li>zipを展開し、そのフォルダを Claude Code か Codex で開きます</li>
+        <li>「<strong>インストール</strong>」と言います</li>
+        <li>AIが、Zoteroを入れるところから順に案内します。Windowsの「許可しますか？」で「はい」を押すことと、Zoteroの画面で数回クリックすることだけお願いします</li>
+      </ol>
+      <p class="note">元に戻すときも、同じフォルダで「アンインストール」と言えば戻せます。</p>
+    </div>
+    <p class="lead route-label">AIを使わない方は、次の3つを順に</p>
     <div class="steps">
       <div class="step reveal"><h3>Zoteroを入れる</h3><p>無料の論文管理ソフトです。起動すると、WordにZoteroのボタンも入ります。Mendeleyの論文もここで読み込めます。</p></div>
       <div class="step reveal"><h3>橋渡しを入れる</h3><p>Zoteroの「ツール → プラグイン」から、Siromegane Bridge を入れます。</p></div>
-      <div class="step reveal"><h3>Wordに窓を入れる</h3><p>Wordに「しろめがね 論文ライブラリ」を入れると、「ホーム」タブにボタンが出ます。</p></div>
+      <div class="step reveal"><h3>Wordに窓を入れる</h3><p>一式の中のファイルをダブルクリックして登録すると、「ホーム」タブにボタンが出ます。手順は一式のマニュアルにあります。</p></div>
     </div>
     <div class="env">
       <strong>使える環境（試作版）</strong>　Windows ／ Word は Microsoft 365 または Office 2024 以降 ／ Zotero 7 以降<br>
@@ -306,7 +323,6 @@ footer .maker { font-size: 11px; opacity: .75; }
       <li class="reveal"><strong>日本語で探す</strong>：日本語で聞くと、AIがPubMed用の検索式を作る</li>
       <li class="reveal"><strong>自分の論文とつなぐ</strong>：自分の論文と、そこで引用した文献をまとめる</li>
       <li class="reveal"><strong>臨床工学の辞書</strong>：分野ごとの仕分けと、略語（ECMO、CHDFなど）での検索</li>
-      <li class="reveal"><strong>AIに入れてもらう</strong>：「インストール」と言うだけで準備が済む</li>
     </ul>
     <p class="lead" style="margin-top:22px;font-size:14px">AIの提案には、必ず論文の該当する一文を並べ、ご自身の目で確かめられる形にする予定です。</p>
   </div>
